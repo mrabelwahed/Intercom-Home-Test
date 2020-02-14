@@ -15,7 +15,7 @@ class FindNearCustomersUsecase @Inject constructor(private val dataSource: Custo
         return getNearbyCustomers(param)
     }
 
-    private fun isNearby(customer: Customer): Boolean {
+    private fun isNearby(customer: Customer ,radius: Long): Boolean {
 
         var R = 6371e3 // metres
         var φ1 = OFFICE_LAT.toRadians()
@@ -28,13 +28,13 @@ class FindNearCustomersUsecase @Inject constructor(private val dataSource: Custo
                 sin(Δλ / 2) * sin(Δλ / 2)
         var c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
-        return R * c <= 100e3
+        return R * c <= radius
     }
 
     public fun getNearbyCustomers(radius: Long): Flowable<List<Customer>> {
         return dataSource.getCustomerList()
             .flatMapIterable { it }
-            .filter { isNearby(it) }
+            .filter { isNearby(it,radius) }
             .toList()
             .toFlowable()
     }

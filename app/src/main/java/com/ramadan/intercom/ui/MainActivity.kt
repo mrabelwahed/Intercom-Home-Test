@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         val dataSource = appComponent.getCustomersDataSource()
 
-        FindNearCustomersUsecase(dataSource).execute(100)
+        FindNearCustomersUsecase(dataSource).execute(100000)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { res ->
